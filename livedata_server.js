@@ -79,7 +79,7 @@ _.extend(Meteor._LivedataSession.prototype, {
   // may have led us to believe otherwise.
   detach: function (socket) {
     var self = this;
-    if (ty.hooks && ty.hooks.detach) ty.hooks.detach.call(socket);
+    if (ty.hooks) ty.hooksInit('detach', socket);
     if (socket === self.socket) {
       self.socket = null;
       self.last_detach_time = +(new Date);
