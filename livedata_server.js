@@ -186,7 +186,7 @@ _.extend(Meteor._LivedataSession.prototype, {
         };
 
         if (msg.msg in self.protocol_handlers)
-          self.protocol_handlers[msg.msg].call(self, msg, unblock);
+          self.protocol_handlers[msg.msg].call(self, msg, unblock, socket);
         else
           self.sendError('Bad request', msg);
         unblock(); // in case the handler didn't already do it
@@ -233,7 +233,7 @@ _.extend(Meteor._LivedataSession.prototype, {
       self.send({msg: 'nosub', id: msg.id});
     },
 
-    method: function (msg, unblock) {
+    method: function (msg, unblock, socket) {
       var self = this;
 
       // reject malformed messages
@@ -286,10 +286,15 @@ _.extend(Meteor._LivedataSession.prototype, {
         self._setUserId(userId);
       };
 
+      var getSocket = function () {
+        return socket
+      }
+
       var invocation = new Meteor._MethodInvocation({
         isSimulation: false,
         userId: self.userId, setUserId: setUserId,
         unblock: unblock,
+        socket: getSocket,
         sessionData: self.sessionData
       });
       try {
@@ -699,7 +704,6 @@ Meteor._LivedataServer = function () {
           sendError('Parse error');
           return;
         }
-        console.log(msg)
         if (typeof msg !== 'object' || !msg.msg) {
           sendError('Bad request', msg);
           return;
