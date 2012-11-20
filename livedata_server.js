@@ -87,7 +87,7 @@ _.extend(Meteor._LivedataSession.prototype, {
     if (socket.meteor_session === self)
       socket.meteor_session = null;
   },
-
+  
   // Should be called periodically to prune the method invocation
   // replay cache.
   cleanup: function () {
@@ -704,6 +704,7 @@ Meteor._LivedataServer = function () {
           sendError('Parse error');
           return;
         }
+
         if (typeof msg !== 'object' || !msg.msg) {
           sendError('Bad request', msg);
           return;
@@ -735,6 +736,8 @@ Meteor._LivedataServer = function () {
                                       session: socket.meteor_session.id}));
           // will kick off previous connection, if any
           socket.meteor_session.connect(socket);
+          Meteor.userSockets = Meteor.userSockets || {}
+          // Meteor.userSockets[]
           return;
         }
 
