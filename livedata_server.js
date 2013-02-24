@@ -482,7 +482,7 @@ _.extend(Meteor._LivedataSession.prototype, {
         };
 
         if (_.has(self.protocol_handlers, msg.msg))
-          self.protocol_handlers[msg.msg].call(self, msg, unblock, socket);
+          self.protocol_handlers[msg.msg].call(self, msg, unblock);
         else
           self.sendError('Bad request', msg);
         unblock(); // in case the handler didn't already do it
@@ -528,7 +528,7 @@ _.extend(Meteor._LivedataSession.prototype, {
       self._stopSubscription(msg.id);
     },
 
-    method: function (msg, unblock, socket) {
+    method: function (msg, unblock) {
       var self = this;
 
       // reject malformed messages
@@ -582,7 +582,7 @@ _.extend(Meteor._LivedataSession.prototype, {
       };
 
       var getSocket = function () {
-        return socket
+        return self.socket
       }
 
       var invocation = new Meteor._MethodInvocation({
