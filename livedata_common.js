@@ -25,6 +25,9 @@ Meteor._MethodInvocation = function (options) {
   // current user id
   this.userId = options.userId;
 
+  // current user socket
+  this.socket = options.socket;
+
   // sets current user id in all appropriate server contexts and
   // reruns subscriptions
   this._setUserId = options.setUserId || function () {};
